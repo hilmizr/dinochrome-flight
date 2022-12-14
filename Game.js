@@ -1,24 +1,29 @@
-import * as THREE from '/libs/three137/three.module.js';
-import { RGBELoader } from '/libs/three137/RGBELoader.js';
-import { LoadingBar } from '/libs/LoadingBar.js';
+import * as THREE from './libs/three137/three.module.js';
+import { RGBELoader } from './libs/three137/RGBELoader.js';
+import { LoadingBar } from './libs/LoadingBar.js';
 import { Plane } from './Plane.js';
 import { Obstacles } from './Obstacles.js';
-import { SFX } from '/libs/SFX.js';
+import { SFX } from './libs/SFX.js';
 
 class Game {
     constructor() {
         const container = document.createElement('div');
         document.body.appendChild(container);
 
+        // Loading Bar
         this.loadingBar = new LoadingBar();
         this.loadingBar.visible = false;
 
+        // Keep track of elapsed time in the game
         this.clock = new THREE.Clock();
 
-        this.assetsPath = '/assets/';
+        // Path to assets
+        this.assetsPath = './assets/';
 
+        // Set camera
         this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 100);
-        this.camera.position.set(-4.37, 0, -4.75);
+        // this.camera.position.set(-4.37, 0, -4.75);
+        this.camera.position.set(0, 0, -5);
         this.camera.lookAt(0, 0, 6);
 
         this.cameraController = new THREE.Object3D();
@@ -28,10 +33,12 @@ class Game {
         this.scene = new THREE.Scene();
         this.scene.add(this.cameraController);
 
+        // Ambient Lighting
         const ambient = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
         ambient.position.set(0.5, 1, 0.25);
         this.scene.add(ambient);
 
+        // Renderer
         this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -134,13 +141,12 @@ class Game {
     }
 
     load() {
+        // Load all objects
         this.loadSkybox();
         this.loading = true;
         this.loadingBar.visible = true;
-
         this.plane = new Plane(this);
         this.obstacles = new Obstacles(this);
-
         this.loadSFX();
     }
 
@@ -155,6 +161,7 @@ class Game {
     }
 
     loadSkybox() {
+        // Skybox is basically a cube with different images applied to each face
         this.scene.background = new THREE.CubeTextureLoader()
             .setPath(`${this.assetsPath}/plane/paintedsky/`)
             .load([
@@ -221,24 +228,28 @@ class Game {
 
     render() {
         if (this.loading) {
+
+            // When plane and obstacles are ready, hide the loading bar
             if (this.plane.ready && this.obstacles.ready) {
                 this.loading = false;
                 this.loadingBar.visible = false;
             } else {
                 return;
             }
+            
         }
 
         const dt = this.clock.getDelta();
         const time = this.clock.getElapsedTime();
 
+        
         this.plane.update(time);
+        requestAnimationFrame(this.plane.animate);
+        this.updateCamera();
 
         if (this.active) {
             this.obstacles.update(this.plane.position, dt);
         }
-
-        this.updateCamera();
 
         this.renderer.render(this.scene, this.camera);
 

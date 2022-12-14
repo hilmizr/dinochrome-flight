@@ -1,21 +1,25 @@
-import { Vector3 } from '/libs/three137/three.module.js';
-import { GLTFLoader } from '/libs/three137/GLTFLoader.js';
+import * as THREE from './libs/three137/three.module.js';
+import { GLTFLoader } from './libs/three137/GLTFLoader.js';
+let mixer, clock;
 
 class Plane {
     constructor(game) {
         this.assetsPath = game.assetsPath;
         this.loadingBar = game.loadingBar;
+        this.renderer = game.renderer;
         this.game = game;
         this.scene = game.scene;
         this.load();
-        this.tmpPos = new Vector3();
+        this.tmpPos = new THREE.Vector3();
     }
 
+    // Get Dino position in the world
     get position() {
         if (this.plane !== undefined) this.plane.getWorldPosition(this.tmpPos);
         return this.tmpPos;
     }
 
+    // Set Dino to visible
     set visible(mode) {
         this.plane.visible = mode;
     }
@@ -27,16 +31,22 @@ class Plane {
         // Load a glTF resource
         loader.load(
             // resource URL
-            'microplane.glb',
+            'dino.glb',
             // called when the resource is loaded
             gltf => {
 
-                this.scene.add(gltf.scene);
-                this.plane = gltf.scene;
-                this.velocity = new Vector3(0, 0, 0.1);
+                gltf.scene.scale.set(0.5, 0.5, 0.5); 
+                const model = gltf.scene;                
+                this.plane = model;
+                this.scene.add(model);
 
-                this.propeller = this.plane.getObjectByName("propeller");
-
+                mixer = new THREE.AnimationMixer(gltf.scene);
+                gltf.animations.forEach((clip) => {
+                    mixer.clipAction(clip).play();
+                });
+        
+                // Velocity of Dino
+                this.velocity = new THREE.Vector3(0, 0, 0.1);
                 this.ready = true;
 
             },
@@ -55,6 +65,10 @@ class Plane {
         );
     }
 
+    animate() {
+        if ( mixer ) mixer.update( game.clock.getDelta() );
+    }
+    
     reset() {
         this.plane.position.set(0, 0, 0);
         this.plane.visible = true;
@@ -62,7 +76,6 @@ class Plane {
     }
 
     update(time) {
-        if (this.propeller !== undefined) this.propeller.rotateZ(1);
 
         if (this.game.active) {
             if (!this.game.spaceKey) {
@@ -71,6 +84,8 @@ class Plane {
                 this.velocity.y += 0.001;
             }
             this.velocity.z += 0.0001;
+
+            // Euler rotation, swaying effect 
             this.plane.rotation.set(0, 0, Math.sin(time * 3) * 0.2, 'XYZ');
             this.plane.translateZ(this.velocity.z);
             this.plane.translateY(this.velocity.y);
