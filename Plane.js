@@ -13,13 +13,13 @@ class Plane {
         this.tmpPos = new THREE.Vector3();
     }
 
-    // Get Dino position in the world
+    // Get object position in the world
     get position() {
         if (this.plane !== undefined) this.plane.getWorldPosition(this.tmpPos);
         return this.tmpPos;
     }
 
-    // Set Dino to visible
+    // Set object to visible
     set visible(mode) {
         this.plane.visible = mode;
     }
@@ -35,8 +35,8 @@ class Plane {
             // called when the resource is loaded
             gltf => {
 
-                gltf.scene.scale.set(0.5, 0.5, 0.5); 
-                const model = gltf.scene;                
+                gltf.scene.scale.set(0.5, 0.5, 0.5);
+                const model = gltf.scene;
                 this.plane = model;
                 this.scene.add(model);
 
@@ -44,8 +44,8 @@ class Plane {
                 gltf.animations.forEach((clip) => {
                     mixer.clipAction(clip).play();
                 });
-        
-                // Velocity of Dino
+
+                // Velocity of object
                 this.velocity = new THREE.Vector3(0, 0, 0.1);
                 this.ready = true;
 
@@ -66,9 +66,9 @@ class Plane {
     }
 
     animate() {
-        if ( mixer ) mixer.update( game.clock.getDelta() );
+        if (mixer) mixer.update(game.clock.getDelta());
     }
-    
+
     reset() {
         this.plane.position.set(0, 0, 0);
         this.plane.visible = true;
@@ -77,20 +77,51 @@ class Plane {
 
     update(time) {
 
-        if (this.game.active) {
-            if (!this.game.spaceKey) {
-                this.velocity.y -= 0.001;
-            } else {
-                this.velocity.y += 0.001;
-            }
-            this.velocity.z += 0.0001;
+        // These variables will make sure that the object won't go out of frame
 
-            // Euler rotation, swaying effect 
-            this.plane.rotation.set(0, 0, Math.sin(time * 3) * 0.2, 'XYZ');
-            this.plane.translateZ(this.velocity.z);
+        // Limit for x axis
+        const xLimit = 15;
+        const xNegLimit = -1 * xLimit;
+
+        // Limit for y axis
+        const yLimit = 1;
+        const yNegLimit = -1 * yLimit;
+
+        // This is basically for incrementing the velocity
+        let velInc = 0.0025;
+
+        // Object will move when appropriate keys are pressed and its position is still within limits
+        if (this.game.active) {
+            if (this.game.up && this.plane.position.y < yLimit) {
+                this.velocity.y += velInc;
+            } 
+            else if (this.game.down && this.plane.position.y > yNegLimit) {
+                this.velocity.y -= velInc;
+            } 
+            else if (this.game.right && this.plane.position.x < xLimit) {
+                this.velocity.x += velInc;
+            } 
+            else if (this.game.left && this.plane.position.x > xNegLimit) {
+                this.velocity.x -= velInc;
+            } 
+            else {
+                this.velocity.x = 0;
+                this.velocity.y = 0;
+            }
+
+            // The object will keep on moving forward
+            this.velocity.z += 0.0001;
+            
+            // Actual function call to move/translate the object within the x,y,z axes
+            this.plane.translateX(this.velocity.x);
             this.plane.translateY(this.velocity.y);
+            this.plane.translateZ(this.velocity.z);
+
+            // Debugging Purposes
+            // console.log("y position: " + this.plane.position.y);
+            // console.log("this.game.up: "  + this.plane.up);
+
         } else {
-            this.plane.rotation.set(0, 0, Math.sin(time * 3) * 0.2, 'XYZ');
             this.plane.position.y = Math.cos(time) * 1.5;
         }
 

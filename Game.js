@@ -23,7 +23,7 @@ class Game {
         // Set camera
         this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 100);
         // this.camera.position.set(-4.37, 0, -4.75);
-        this.camera.position.set(0, 0, -5);
+        this.camera.position.set(0, 3, -5);
         this.camera.lookAt(0, 0, 6);
 
         this.cameraController = new THREE.Object3D();
@@ -46,26 +46,31 @@ class Game {
         container.appendChild(this.renderer.domElement);
         this.setEnvironment();
 
-        this.active = false;
         this.load();
 
         window.addEventListener('resize', this.resize.bind(this));
 
+        // Triggered when key is pressed
         document.addEventListener('keydown', this.keyDown.bind(this));
+
+        // Triggered when key is released 
         document.addEventListener('keyup', this.keyUp.bind(this));
 
-        document.addEventListener('touchstart', this.mouseDown.bind(this));
-        document.addEventListener('touchend', this.mouseUp.bind(this));
-        document.addEventListener('mousedown', this.mouseDown.bind(this));
-        document.addEventListener('mouseup', this.mouseUp.bind(this));
+        this.up = false;
+        this.down = false;
+        this.right = false;
+        this.left = false;
+        this.forward = false;
 
-        this.spaceKey = false;
-
+        // Check if the play button has been pressed and game is active
+        this.active = false;
         const btn = document.getElementById('playBtn');
         btn.addEventListener('click', this.startGame.bind(this));
     }
 
     startGame() {
+
+        // When game is started or active hide these elements
         const gameover = document.getElementById('gameover');
         const instructions = document.getElementById('instructions');
         const btn = document.getElementById('playBtn');
@@ -98,28 +103,46 @@ class Game {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
+    // =============CONTROLS=================
+    // Events relating to when a key is pressed down
+    // This is basiscally for the WASD keys
     keyDown(evt) {
         switch (evt.keyCode) {
-            case 32:
-                this.spaceKey = true;
+            // W
+            case 87:
+                this.up = true;
+                break;
+            // S
+            case 83:
+                this.down = true;
+                break;
+            // D
+            case 65:
+                this.right = true;
+                break;
+            // A
+            case 68:
+                this.left = true;
                 break;
         }
     }
-
+    // Events relating to when a key is released
+     // Also for the WASD keys
     keyUp(evt) {
         switch (evt.keyCode) {
-            case 32:
-                this.spaceKey = false;
+            case 87:
+                this.up = false;
+                break;
+            case 83:
+                this.down = false;
+                break;
+            case 65:
+                this.right = false;
+                break;
+            case 68:
+                this.left = false;
                 break;
         }
-    }
-
-    mouseDown(evt) {
-        this.spaceKey = true;
-    }
-
-    mouseUp(evt) {
-        this.spaceKey = false;
     }
 
     setEnvironment() {
@@ -140,6 +163,7 @@ class Game {
         });
     }
 
+    // =============LOADERS=================
     load() {
         // Load all objects
         this.loadSkybox();
@@ -236,13 +260,13 @@ class Game {
             } else {
                 return;
             }
-            
+
         }
 
         const dt = this.clock.getDelta();
         const time = this.clock.getElapsedTime();
 
-        
+
         this.plane.update(time);
         requestAnimationFrame(this.plane.animate);
         this.updateCamera();
