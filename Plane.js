@@ -74,11 +74,11 @@ class Plane {
         this.plane.visible = true;
         this.velocity.set(0, 0, 0.1);
     }
-
+    
     update(time) {
 
+        // =============CONTROLS=================
         // These variables will make sure that the object won't go out of frame
-
         // Limit for x axis
         const xLimit = 15;
         const xNegLimit = -1 * xLimit;
