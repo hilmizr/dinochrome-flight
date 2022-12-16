@@ -1,6 +1,6 @@
-import { IcosahedronGeometry, TextureLoader, ShaderMaterial, Mesh, ShaderChunk } from '/libs/three137/three.module.js';
-import { noise } from '/libs/Noise.js';
-import { Tween } from '/libs/Toon3D.js';
+import { IcosahedronGeometry, TextureLoader, ShaderMaterial, Mesh, ShaderChunk } from './libs/three137/three.module.js';
+import { noise } from './libs/Noise.js';
+import { Tween } from './libs/Toon3D.js';
 
 class Explosion {
     static vshader = `
