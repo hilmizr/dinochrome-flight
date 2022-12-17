@@ -81,6 +81,7 @@ class Game {
     this.score = 0;
     this.bonusScore = 0;
     this.health_point = 100;
+    this.shield_point = 0;
 
     const score_elm = document.getElementById("score");
     score_elm.innerHTML = this.score;
@@ -88,8 +89,11 @@ class Game {
     // elm = document.getElementById('lives');
     // elm.innerHTML = this.lives;
 
-    const health_elm = document.querySelector("#bar span");
+    const health_elm = document.querySelector("#health-span");
     health_elm.innerHTML = this.health_point + "%";
+
+    const shield_elm = document.querySelector("#shield-span");
+    shield_elm.innerHTML = this.shield_point + "%";
 
     this.plane.reset();
     this.obstacles.reset();
@@ -233,7 +237,7 @@ class Game {
     // const elm = document.getElementById('lives');
     // elm.innerHTML = this.lives;
 
-    const health = document.querySelector("#bar span");
+    const health = document.querySelector("#health-span");
     health.innerHTML = this.health_point + "%";
 
     if (this.health_point > 10 && this.health_point < 100) health.style.right = "195px";
@@ -243,6 +247,36 @@ class Game {
     health_bar.value = this.health_point;
 
     if (this.health_point == 0) setTimeout(this.gameOver.bind(this), 1200);
+
+    this.sfx.play("explosion");
+  }
+
+  fillShield() {
+    this.shield_point = 100;
+
+    const shield = document.querySelector("#shield-span");
+    shield.innerHTML = this.shield_point + "%";
+
+    if (this.shield_point > 10 && this.shield_point < 100) shield.style.right = "195px";
+    else if (this.shield_point < 10) shield.style.right = "185px";
+
+    const shield_bar = document.getElementById("shield-bar");
+    shield_bar.value = this.shield_point;
+
+    this.sfx.play("gliss");
+  }
+
+  decShield() {
+    this.shield_point -= 20;
+
+    const shield = document.querySelector("#shield-span");
+    shield.innerHTML = this.shield_point + "%";
+
+    if (this.shield_point > 10 && this.shield_point < 100) shield.style.right = "195px";
+    else if (this.shield_point < 10) shield.style.right = "185px";
+
+    const shield_bar = document.getElementById("shield-bar");
+    shield_bar.value = this.shield_point;
 
     this.sfx.play("explosion");
   }

@@ -10,6 +10,7 @@ class Obstacles {
         this.scene = game.scene;
         this.loadStar();
         this.loadBomb();
+        this.loadShield();
         this.tmpPos = new Vector3();
         this.explosions = [];
     }
@@ -29,7 +30,7 @@ class Obstacles {
 
                 this.star.name = 'star';
 
-                if (this.bomb !== undefined) this.initialize();
+                if (this.bomb !== undefined && this.shield !== undefined) this.initialize();
 
             },
             // called while loading is progressing
@@ -59,13 +60,44 @@ class Obstacles {
 
                 this.bomb = gltf.scene.children[0];
 
-                if (this.star !== undefined) this.initialize();
+                if (this.star !== undefined && this.shield !== undefined) this.initialize();
 
             },
             // called while loading is progressing
             xhr => {
 
                 this.loadingBar.update('bomb', xhr.loaded, xhr.total);
+
+            },
+            // called when loading has errors
+            err => {
+
+                console.error(err);
+
+            }
+        );
+    }
+
+    loadShield() {
+        const loader = new GLTFLoader().setPath(`${this.assetsPath}plane/`);
+
+        // Load a glTF resource
+        loader.load(
+            // resource URL
+            'shield.glb',
+            // called when the resource is loaded
+            gltf => {
+
+                this.shield = gltf.scene.children[0];
+                this.shield.name = 'shield';
+
+                if (this.star !== undefined && this.bomb !== undefined) this.initialize();
+
+            },
+            // called while loading is progressing
+            xhr => {
+
+                this.loadingBar.update('shield', xhr.loaded, xhr.total);
 
             },
             // called when loading has errors
@@ -106,6 +138,13 @@ class Obstacles {
         for (let i = 0; i < 3; i++) {
 
             const obstacle1 = obstacle.clone();
+
+            // Memunculkan shield pada baris ke-4 posisi x = 11
+            if (i == 2) {
+                this.shield.rotation.z = Math.PI;
+                this.shield.position.x = 11;
+                obstacle1.add(this.shield);
+            }
 
             this.scene.add(obstacle1);
             this.obstacles.push(obstacle1);
@@ -149,6 +188,11 @@ class Obstacles {
 
         this.obstacles.forEach(obstacle => {
             obstacle.children[0].rotateY(0.01);
+
+            // Memutar shield jika pada baris terdapat shield
+            if (obstacle.children[7] !== undefined)
+                obstacle.children[7].rotateZ(0.01);
+            
             const relativePosZ = obstacle.position.z - pos.z;
             if (Math.abs(relativePosZ) < 2 && !obstacle.userData.hit) {
                 collisionObstacle = obstacle;
@@ -181,9 +225,17 @@ class Obstacles {
         if (obj.name == 'star') {
             obj.visible = false;
             this.game.incScore();
+        } else if (obj.name == 'shield') {
+            obj.visible = false;
+            this.game.fillShield();
         } else {
             this.explosions.push(new Explosion(obj, this));
-            this.game.decLives();
+            
+            if (this.game.shield_point != 0) {
+                this.game.decShield();
+            } else {
+                this.game.decLives();
+            }
         }
     }
 }
