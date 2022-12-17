@@ -85,17 +85,17 @@ class Obstacles {
         obstacle.add(this.star);
 
         this.bomb.rotation.x = -Math.PI * 0.5;
-        this.bomb.position.y = 7.5;
+        this.bomb.position.x = 7.5;
         obstacle.add(this.bomb);
 
         let rotate = true;
 
-        for (let y = 5; y > -8; y -= 2.5) {
+        for (let x = 5; x > -8; x -= 2.5) {
             rotate = !rotate;
-            if (y == 0) continue;
+            if (x == 0) continue;
             const bomb = this.bomb.clone();
             bomb.rotation.x = (rotate) ? -Math.PI * 0.5 : 0;
-            bomb.position.y = y;
+            bomb.position.x = x;
             obstacle.add(bomb);
 
         }
@@ -136,7 +136,7 @@ class Obstacles {
         this.obstacleSpawn.pos += 30;
         const offset = (Math.random() * 2 - 1) * this.obstacleSpawn.offset;
         this.obstacleSpawn.offset += 0.2;
-        obstacle.position.set(0, offset, this.obstacleSpawn.pos);
+        obstacle.position.set(offset, 0, this.obstacleSpawn.pos);
         obstacle.children[0].rotation.y = Math.random() * Math.PI * 2;
         obstacle.userData.hit = false;
         obstacle.children.forEach(child => {
