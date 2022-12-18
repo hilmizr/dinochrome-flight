@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!--favicon -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./css/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./css/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./css/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="./css/favicon/site.webmanifest" />
+    <link rel="mask-icon" href="./css/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=RocknRoll+One&display=swap" rel="stylesheet" />
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "RocknRoll One", sans-serif;
+      }
+
+      #playBtn {
+        position: absolute;
+        width: 180px;
+        height: 100px;
+        font-family: "RocknRoll One", sans-serif;
+        font-size: 40px;
+        bottom: 100px;
+        border-radius: 20px;
+        background-color: darkblue;
+        color: white;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      #instructions {
+        position: absolute;
+        bottom: 250px;
+        font-family: "RocknRoll One", sans-serif;
+        font-size: 30px;
+        color: darkblue;
+        width: 300px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 20px;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+      }
+
+      #gameover {
+        display: none;
+        position: absolute;
+        bottom: 250px;
+        font-family: "RocknRoll One", sans-serif;
+        font-size: 50px;
+        color: darkblue;
+        width: 300px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 20px;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+      }
+
+      #info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        font-family: "RocknRoll One", sans-serif;
+        font-size: 50px;
+      }
+
+      #info img {
+        padding-top: 20px;
+      }
+
+      #life {
+        position: absolute;
+        left: 20px;
+      }
+
+      #score-panel {
+        position: absolute;
+        top: 0;
+        right: 20px;
+        float: right;
+      }
+
+      #lives {
+        display: inline;
+        position: relative;
+        top: -15px;
+      }
+
+      #score {
+        display: inline;
+        position: relative;
+        top: -15px;
+      }
+
+      #bar {
+        margin-left: 30px;
+      }
+
+      /* Health  */
+      #health-span {
+        font-size: 28px;
+        color: white;
+        position: relative;
+        top: 2px;
+        right: 205px;
+      }
+
+      #health-bar {
+        border: none;
+        width: 300px;
+        height: 40px;
+        position: relative;
+        left: 70px;
+      }
+
+      #health-bar::-moz-progress-bar {
+        background: lightblue;
+      }
+
+      #health-bar::-webkit-progress-value {
+        background: rgb(255, 40, 40);
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+        border-top-right-radius: 50px;
+        border-bottom-right-radius: 50px;
+        transition: all 1.5s ease;
+        box-shadow: 2px -2px 8px rgb(155, 40, 40), -2px 2px 8px rgb(155, 40, 40), 2px 2px 8px rgb(155, 40, 40), -2px -2px 8px rgb(155, 40, 40);
+      }
+
+      #health-bar::-webkit-progress-bar {
+        background: rgb(235, 175, 175);
+        border-radius: 50px;
+        border: 2px solid
+        d rgb(36, 36, 36);
+      }
+      #health-icon {
+        position: absolute;
+        top: 0px;
+        left: 10px;
+        float: left;
+      }
+      /* Shield */
+      #shield-span {
+        font-size: 28px;
+        color: white;
+        position: relative;
+        top: 2px;
+        right: 185px;
+      }
+
+      #shield-bar {
+        border: none;
+        width: 300px;
+        height: 40px;
+        position: relative;
+        left: 70px;
+      }
+
+      #shield-bar::-moz-progress-bar {
+        background: lightblue;
+      }
+
+      #shield-bar::-webkit-progress-value {
+        background: rgb(40, 176, 255);
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+        border-top-right-radius: 50px;
+        border-bottom-right-radius: 50px;
+        transition: all 1.5s ease;
+        box-shadow: 2px -2px 8px rgb(40, 40, 155), -2px 2px 8px rgb(40, 40, 155), 2px 2px 8px rgb(40, 40, 155), -2px -2px 8px rgb(40, 40, 155);
+      }
+
+      #shield-bar::-webkit-progress-bar {
+        background: rgb(157, 199, 253);
+        border-radius: 50px;
+        border: 2px solid rgb(36, 36, 36);
+      }
+
+      #shield-icon {
+        position: absolute;
+        top: 73px;
+        left: 10px;
+        float: left;
+      }
+    </style>
+
+    <title>Lecture 5.6</title>
+  </head>
+
+  <body>
+    <p id="instructions">Collect stars. <br />Avoid bombs. <br />Spacebar, mousedown or touch to climb</p>
+    <div id="info">
+      <div id="bar">
+        <progress id="health-bar" value="100" max="100"></progress>
+        <span id="health-span">100%</span> <br />
+        <progress id="shield-bar" value="0" max="100"></progress>
+        <span id="shield-span">0%</span>
+      </div>
+      <div id="score-panel">
+        <div id="score">0</div>
+        <img src="./assets/plane/star-icon.png" />
+      </div>
+        <div id="health-icon">
+          <img src="./assets/plane/health-icon.png" />
+        </div>
+        <div id="shield-icon">
+          <img src="./assets/plane/shield-icon.png" />
+        </div>
+    </div>
+    <p id="gameover">Game over</p>
+    <button id="playBtn">PLAY</button>
+    <script type="module">
+      import { Game } from "./Game.js";
+      document.addEventListener("DOMContentLoaded", () => {
+        const game = new Game();
+        window.game = game;
+      });
+    </script>
+  </body>
+</html>
