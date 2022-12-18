@@ -104,13 +104,12 @@
         top: -15px;
       }
 
-      /* Health Bar */
       #bar {
         margin-left: 30px;
-        /* transform: translateX(20px); */
       }
 
-      #bar span {
+      /* Health  */
+      #health-span {
         font-size: 28px;
         color: white;
         position: relative;
@@ -135,12 +134,22 @@
         border-top-right-radius: 50px;
         border-bottom-right-radius: 50px;
         transition: all 1.5s ease;
-        box-shadow: 2px -2px 14px rgb(235, 175, 175), -2px 2px 14px rgb(235, 175, 175), 2px 2px 14px rgb(235, 175, 175), -2px -2px 14px rgb(235, 175, 175);
+        box-shadow: 2px -2px 8px rgb(155, 40, 40), -2px 2px 8px rgb(155, 40, 40), 2px 2px 8px rgb(155, 40, 40), -2px -2px 8px rgb(155, 40, 40);
       }
 
       #health-bar::-webkit-progress-bar {
         background: rgb(235, 175, 175);
         border-radius: 50px;
+        border: 2px solid rgb(36, 36, 36);
+      }
+
+      /* Shield */
+      #shield-span {
+        font-size: 28px;
+        color: white;
+        position: relative;
+        top: 2px;
+        right: 185px;
       }
 
       #shield-bar {
@@ -160,12 +169,13 @@
         border-top-right-radius: 50px;
         border-bottom-right-radius: 50px;
         transition: all 1.5s ease;
-        box-shadow: 2px -2px 14px rgb(175, 203, 235), -2px 2px 14px rgb(175, 213, 235), 2px 2px 14px rgb(235, 175, 175), -2px -2px 14px rgb(235, 175, 175);
+        box-shadow: 2px -2px 8px rgb(40, 40, 155), -2px 2px 8px rgb(40, 40, 155), 2px 2px 8px rgb(40, 40, 155), -2px -2px 8px rgb(40, 40, 155);
       }
 
       #shield-bar::-webkit-progress-bar {
         background: rgb(157, 199, 253);
         border-radius: 50px;
+        border: 2px solid rgb(36, 36, 36);
       }
     </style>
 
@@ -177,14 +187,10 @@
     <div id="info">
       <div id="bar">
         <progress id="health-bar" value="100" max="100"></progress>
-        <span id="health-span">100%</span> <br>
+        <span id="health-span">100%</span> <br />
         <progress id="shield-bar" value="0" max="100"></progress>
         <span id="shield-span">0%</span>
       </div>
-      <!-- <div id="life">
-            <img src="./assets/plane/plane-icon.png" />
-            <div id="lives">3</div>
-        </div> -->
       <div id="score-panel">
         <div id="score">0</div>
         <img src="./assets/plane/star-icon.png" />
