@@ -86,11 +86,12 @@ class Game {
     const score_elm = document.getElementById("score");
     score_elm.innerHTML = this.score;
 
-    // elm = document.getElementById('lives');
-    // elm.innerHTML = this.lives;
+    const health_bar = document.getElementById("health-bar");
+    health_bar.value = this.health_point;
 
     const health_elm = document.querySelector("#health-span");
     health_elm.innerHTML = this.health_point + "%";
+    health_elm.style.right = "205px";
 
     const shield_elm = document.querySelector("#shield-span");
     shield_elm.innerHTML = this.shield_point + "%";
@@ -234,9 +235,6 @@ class Game {
   decLives() {
     this.health_point -= 20;
 
-    // const elm = document.getElementById('lives');
-    // elm.innerHTML = this.lives;
-
     const health = document.querySelector("#health-span");
     health.innerHTML = this.health_point + "%";
 
@@ -258,7 +256,7 @@ class Game {
     shield.innerHTML = this.shield_point + "%";
 
     if (this.shield_point > 10 && this.shield_point < 100) shield.style.right = "195px";
-    else if (this.shield_point < 10) shield.style.right = "185px";
+    else if (this.shield_point == 100) shield.style.right = "205px";
 
     const shield_bar = document.getElementById("shield-bar");
     shield_bar.value = this.shield_point;
@@ -273,7 +271,7 @@ class Game {
     shield.innerHTML = this.shield_point + "%";
 
     if (this.shield_point > 10 && this.shield_point < 100) shield.style.right = "195px";
-    else if (this.shield_point < 10) shield.style.right = "185px";
+    else if (this.shield_point == 100) shield.style.right = "205px";
 
     const shield_bar = document.getElementById("shield-bar");
     shield_bar.value = this.shield_point;
