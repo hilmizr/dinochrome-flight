@@ -11,6 +11,7 @@ class Obstacles {
     this.loadStar();
     this.loadBomb();
     this.loadShield();
+    this.loadHeart(); 
     this.tmpPos = new Vector3();
     this.explosions = [];
   }
@@ -29,7 +30,8 @@ class Obstacles {
 
         this.star.name = "star";
 
-        if (this.bomb !== undefined && this.shield !== undefined) this.initialize();
+        if (this.bomb !== undefined && this.shield !== undefined && this.heart !== undefined) 
+          this.initialize();
       },
       // called while loading is progressing
       (xhr) => {
@@ -53,7 +55,8 @@ class Obstacles {
       (gltf) => {
         this.bomb = gltf.scene.children[0];
 
-        if (this.star !== undefined && this.shield !== undefined) this.initialize();
+        if (this.star !== undefined && this.shield !== undefined && this.heart !== undefined) 
+          this.initialize();
       },
       // called while loading is progressing
       (xhr) => {
@@ -78,7 +81,8 @@ class Obstacles {
         this.shield = gltf.scene.children[0];
         this.shield.name = "shield";
 
-        if (this.star !== undefined && this.bomb !== undefined) this.initialize();
+        if (this.star !== undefined && this.bomb !== undefined && this.heart !== undefined) 
+          this.initialize();
       },
       // called while loading is progressing
       (xhr) => {
@@ -91,7 +95,34 @@ class Obstacles {
     );
   }
 
+  loadHeart() {
+    const loader = new GLTFLoader().setPath(`${this.assetsPath}plane/`);
+
+    // Load a glTF resource
+    loader.load(
+      // resource URL
+      "heart.glb",
+      // called when the resource is loaded
+      (gltf) => {
+        this.heart = gltf.scene.children[0];
+        this.heart.name = "heart";
+
+        if (this.star !== undefined && this.bomb !== undefined && this.shield !== undefined) 
+          this.initialize();
+      },
+      // called while loading is progressing
+      (xhr) => {
+        this.loadingBar.update("heart", xhr.loaded, xhr.total);
+      },
+      // called when loading has errors
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
+
   initialize() {
+    console.log(this.heart);
     this.obstacles = [];
 
     const obstacle = new Group();
@@ -119,11 +150,15 @@ class Obstacles {
     for (let i = 0; i < 3; i++) {
       const obstacle1 = obstacle.clone();
 
-      // Memunculkan shield pada baris ke-4 posisi x = 11
+      // Memunculkan shield dan heart pada baris ke-4 
       if (i == 2) {
         this.shield.rotation.z = Math.PI;
         this.shield.position.x = 11;
         obstacle1.add(this.shield);
+
+        this.heart.rotation.z = Math.PI;
+        this.heart.position.x = -11;
+        obstacle1.add(this.heart);
       }
 
       this.scene.add(obstacle1);
@@ -158,7 +193,12 @@ class Obstacles {
     obstacle.children[0].rotation.y = Math.random() * Math.PI * 2;
     obstacle.userData.hit = false;
     obstacle.children.forEach((child) => {
-      child.visible = true;
+      if ((child.name == "shield" || child.name == "heart") && (Math.random()<0.7)) {
+        // "despawn" powerup
+        child.visible = false;
+      } else {
+        child.visible = true;
+      }
     });
   }
 
@@ -186,7 +226,9 @@ class Obstacles {
         const dist = this.tmpPos.distanceToSquared(pos);
         if (dist < 5) {
           collisionObstacle.userData.hit = true;
-          this.hit(child);
+          if (child.visible) {
+            this.hit(child);
+          }
           return true;
         }
       });
@@ -201,9 +243,12 @@ class Obstacles {
     if (obj.name == "star") {
       obj.visible = false;
       this.game.incScore();
-    } else if (obj.name == "shield" && this.game.health_point != 0) {
+    } else if (obj.name == "shield" && this.game.health_point >= 0) {
       obj.visible = false;
       this.game.fillShield();
+    } else if (obj.name == "heart" && this.game.health_point >= 0) {
+      obj.visible = false;
+      this.game.incLives();
     } else {
       this.explosions.push(new Explosion(obj, this));
 

@@ -232,6 +232,25 @@ class Game {
     elm.innerHTML = this.score + this.bonusScore;
   }
 
+  incLives() {
+    
+    this.health_point += 20;
+    if (this.health_point >= 100) {
+      this.health_point = 100;
+    } 
+
+    const health = document.querySelector("#health-span");
+    health.innerHTML = this.health_point + "%";
+
+    if (this.health_point > 10 && this.health_point < 100) health.style.right = "195px";
+    else if (this.health_point < 10) health.style.right = "185px";
+
+    const health_bar = document.getElementById("health-bar");
+    health_bar.value = this.health_point;
+
+    this.sfx.play("gliss");
+  }
+
   decLives() {
     this.health_point -= 20;
 
@@ -244,7 +263,7 @@ class Game {
     const health_bar = document.getElementById("health-bar");
     health_bar.value = this.health_point;
 
-    if (this.health_point == 0) setTimeout(this.gameOver.bind(this), 1200);
+    if (this.health_point <= 0) setTimeout(this.gameOver.bind(this), 800);
 
     this.sfx.play("explosion");
   }
