@@ -219,7 +219,6 @@ class Game {
   }
 
   incLives() {
-
     this.health_point += 20;
     if (this.health_point >= 100) {
       this.health_point = 100;
@@ -230,6 +229,7 @@ class Game {
 
     if (this.health_point > 10 && this.health_point < 100) health.style.right = "195px";
     else if (this.health_point < 10) health.style.right = "185px";
+    else if (this.health_point == 100) health.style.right = "205px";
 
     const health_bar = document.getElementById("health-bar");
     health_bar.value = this.health_point;
