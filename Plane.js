@@ -66,7 +66,7 @@ class Plane {
     }
 
     animate() {
-        if (mixer) mixer.update(game.clock.getDelta());
+        if (mixer) mixer.update(game.clockPtera.getDelta());
     }
 
     reset() {
