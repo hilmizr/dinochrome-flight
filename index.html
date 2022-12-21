@@ -144,7 +144,14 @@
         border-radius: 50px;
         border: 2px solid rgb(36, 36, 36);
       }
-
+      
+      #health-icon {
+        position: absolute;
+        top: 0px;
+        left: 10px;
+        float: left;
+      }
+      
       /* Shield */
       #shield-span {
         font-size: 28px;
@@ -179,6 +186,13 @@
         border-radius: 50px;
         border: 2px solid rgb(36, 36, 36);
       }
+      
+      #shield-icon {
+        position: absolute;
+        top: 73px;
+        left: 10px;
+        float: left;
+      }
     </style>
 
     <title>Lecture 5.6</title>
@@ -197,6 +211,12 @@
         <div id="score">0</div>
         <img src="./assets/ptera/star-icon.png" />
       </div>
+      <div id="health-icon">
+          <img src="./assets/plane/health-icon.png" />
+        </div>
+      <div id="shield-icon">
+          <img src="./assets/plane/shield-icon.png" />
+        </div>
     </div>
     <p id="gameover">Game over</p>
     <button id="playBtn">PLAY</button>
