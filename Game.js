@@ -21,9 +21,9 @@ class Game {
     this.assetsPath = "./assets/";
 
     // Set camera
-    this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 100);
+    this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 100);
     // this.camera.position.set(-4.37, 0, -4.75);
-    this.camera.position.set(0, 3, -5);
+    this.camera.position.set(0, 3, -6);
     this.camera.lookAt(0, 0, 6);
 
     this.cameraController = new THREE.Object3D();
@@ -34,7 +34,7 @@ class Game {
     this.scene.add(this.cameraController);
 
     // Ambient Lighting
-    const ambient = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+    const ambient = new THREE.HemisphereLight(0xeae3cf, 0x6f685f, 1);
     ambient.position.set(0.5, 1, 0.2);
     this.scene.add(ambient);
 
@@ -56,11 +56,8 @@ class Game {
     // Triggered when key is released
     document.addEventListener("keyup", this.keyUp.bind(this));
 
-    this.up = false;
-    this.down = false;
     this.right = false;
     this.left = false;
-    this.forward = false;
 
     // Check if the play button has been pressed and game is active
     this.active = false;
@@ -115,14 +112,6 @@ class Game {
   // This is basiscally for the WASD keys
   keyDown(evt) {
     switch (evt.keyCode) {
-      // W
-      case 87:
-        this.up = true;
-        break;
-      // S
-      case 83:
-        this.down = true;
-        break;
       // D
       case 65:
         this.right = true;
@@ -137,12 +126,6 @@ class Game {
   // Also for the WASD keys
   keyUp(evt) {
     switch (evt.keyCode) {
-      case 87:
-        this.up = false;
-        break;
-      case 83:
-        this.down = false;
-        break;
       case 65:
         this.right = false;
         break;
@@ -160,7 +143,7 @@ class Game {
     const self = this;
 
     loader.load(
-      "hdr/venice_sunset_1k.hdr",
+      "hdr/wrath.hdr",
       (texture) => {
         const envMap = pmremGenerator.fromEquirectangular(texture).texture;
         pmremGenerator.dispose();
@@ -196,8 +179,9 @@ class Game {
   }
 
   loadSkybox() {
-    // Skybox is basically a cube with different images applied to each face
-    this.scene.background = new THREE.CubeTextureLoader().setPath(`${this.assetsPath}/plane/paintedsky/`).load(["px.jpg", "nx.jpg", "py.jpg", "ny.jpg", "pz.jpg", "nz.jpg"], () => {
+    // // Skybox is basically a cube with different images applied to each face
+    // // Set up the skybox
+    this.scene.background = new THREE.CubeTextureLoader().setPath(`${this.assetsPath}/plane/paintedsky/`).load(["wrath_ft.jpg", "wrath_bk.jpg", "wrath_up.jpg", "wrath_dn.jpg", "wrath_rt.jpg", "wrath_lf.jpg"], () => {
       this.renderer.setAnimationLoop(this.render.bind(this));
     });
   }
@@ -233,11 +217,11 @@ class Game {
   }
 
   incLives() {
-    
+
     this.health_point += 20;
     if (this.health_point >= 100) {
       this.health_point = 100;
-    } 
+    }
 
     const health = document.querySelector("#health-span");
     health.innerHTML = this.health_point + "%";

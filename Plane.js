@@ -83,22 +83,12 @@ class Plane {
         const xLimit = 15;
         const xNegLimit = -1 * xLimit;
 
-        // Limit for y axis
-        const yLimit = 1;
-        const yNegLimit = -1 * yLimit;
-
         // This is basically for incrementing the velocity
         let velInc = 0.0025;
 
         // Object will move when appropriate keys are pressed and its position is still within limits
         if (this.game.active) {
-            if (this.game.up && this.plane.position.y < yLimit) {
-                this.velocity.y += velInc;
-            } 
-            else if (this.game.down && this.plane.position.y > yNegLimit) {
-                this.velocity.y -= velInc;
-            } 
-            else if (this.game.right && this.plane.position.x < xLimit) {
+            if (this.game.right && this.plane.position.x < xLimit) {
                 this.velocity.x += velInc;
             } 
             else if (this.game.left && this.plane.position.x > xNegLimit) {
@@ -114,7 +104,6 @@ class Plane {
             
             // Actual function call to move/translate the object within the x,y,z axes
             this.plane.translateX(this.velocity.x);
-            this.plane.translateY(this.velocity.y);
             this.plane.translateZ(this.velocity.z);
 
             // Debugging Purposes
