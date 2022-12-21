@@ -189,9 +189,7 @@ class Obstacles {
   respawnObstacle(obstacle) {
     this.obstacleSpawn.pos += 30;
     const offset = (Math.random() * 2 - 1) * this.obstacleSpawn.offset;
-
-    if(this.obstacleSpawn.offset < 5)
-    {
+    if (this.obstacleSpawn.offset <5) {
       this.obstacleSpawn.offset += 0.2;
     }
     obstacle.position.set(offset, 0, this.obstacleSpawn.pos);
