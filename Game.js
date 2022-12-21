@@ -278,6 +278,7 @@ class Game {
 
     if (this.shield_point > 10 && this.shield_point < 100) shield.style.right = "195px";
     else if (this.shield_point == 100) shield.style.right = "205px";
+    else if (this.shield_point == 0) shield.style.right = "185px";
 
     const shield_bar = document.getElementById("shield-bar");
     shield_bar.value = this.shield_point;
