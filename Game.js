@@ -16,6 +16,7 @@ class Game {
 
     // Keep track of elapsed time in the game
     this.clock = new THREE.Clock();
+    this.clockPtera = new THREE.Clock();
 
     // Path to assets
     this.assetsPath = "./assets/";
@@ -302,7 +303,7 @@ class Game {
     }
 
     const dt = this.clock.getDelta();
-    const time = this.clock.getElapsedTime();
+    const time = this.clockPtera.getElapsedTime();
 
     this.plane.update(time);
     requestAnimationFrame(this.plane.animate);
