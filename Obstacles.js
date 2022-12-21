@@ -1,4 +1,4 @@
-import { Group, Vector3 } from "./libs/three137/three.module.js";
+import { Group, Vector3, Color } from "./libs/three137/three.module.js";
 import { GLTFLoader } from "./libs/three137/GLTFLoader.js";
 import { Explosion } from "./Explosion.js";
 
@@ -17,17 +17,17 @@ class Obstacles {
   }
 
   loadStar() {
-    const loader = new GLTFLoader().setPath(`${this.assetsPath}plane/`);
+    const loader = new GLTFLoader().setPath(`${this.assetsPath}ptera/`);
     this.ready = false;
 
     // Load a glTF resource
     loader.load(
       // resource URL
-      "star.glb",
+      "crystal.glb",
       // called when the resource is loaded
       (gltf) => {
         this.star = gltf.scene.children[0];
-
+        this.star.scale.set(0.25, 0.25, 0.25);
         this.star.name = "star";
 
         if (this.bomb !== undefined && this.shield !== undefined && this.heart !== undefined) 
@@ -45,7 +45,7 @@ class Obstacles {
   }
 
   loadBomb() {
-    const loader = new GLTFLoader().setPath(`${this.assetsPath}plane/`);
+    const loader = new GLTFLoader().setPath(`${this.assetsPath}ptera/`);
 
     // Load a glTF resource
     loader.load(
@@ -70,7 +70,7 @@ class Obstacles {
   }
 
   loadShield() {
-    const loader = new GLTFLoader().setPath(`${this.assetsPath}plane/`);
+    const loader = new GLTFLoader().setPath(`${this.assetsPath}ptera/`);
 
     // Load a glTF resource
     loader.load(
@@ -96,7 +96,7 @@ class Obstacles {
   }
 
   loadHeart() {
-    const loader = new GLTFLoader().setPath(`${this.assetsPath}plane/`);
+    const loader = new GLTFLoader().setPath(`${this.assetsPath}ptera/`);
 
     // Load a glTF resource
     loader.load(
@@ -106,6 +106,7 @@ class Obstacles {
       (gltf) => {
         this.heart = gltf.scene.children[0];
         this.heart.name = "heart";
+        this.heart.scale.set(0.02, 0.02, 0.02);
 
         if (this.star !== undefined && this.bomb !== undefined && this.shield !== undefined) 
           this.initialize();
@@ -172,7 +173,7 @@ class Obstacles {
 
   removeExplosion(explosion) {
     const index = this.explosions.indexOf(explosion);
-    if (index != -1) this.explosions.indexOf(index, 1);
+    if (index != -1) this.explosions.splice(index, 1);
   }
 
   reset() {
@@ -192,7 +193,7 @@ class Obstacles {
       this.obstacleSpawn.offset += 0.2;
     }
     obstacle.position.set(offset, 0, this.obstacleSpawn.pos);
-    obstacle.children[0].rotation.y = Math.random() * Math.PI * 2;
+    obstacle.children[0].rotation.z = Math.random() * Math.PI * 2;
     obstacle.userData.hit = false;
     obstacle.children.forEach((child) => {
       if ((child.name == "shield" || child.name == "heart") && (Math.random()<0.7)) {
@@ -208,7 +209,7 @@ class Obstacles {
     let collisionObstacle;
 
     this.obstacles.forEach((obstacle) => {
-      obstacle.children[0].rotateY(0.01);
+      obstacle.children[0].rotateZ(0.01);
 
       // Memutar shield jika pada baris terdapat shield
       if (obstacle.children[7] !== undefined) obstacle.children[7].rotateZ(0.01);
