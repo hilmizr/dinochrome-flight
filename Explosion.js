@@ -68,7 +68,7 @@ void main() {
             u_mouse: { value: { x: 0.0, y: 0.0 } },
             u_opacity: { value: 0.6 },
             u_resolution: { value: { x: 0, y: 0 } },
-            u_tex: { value: new TextureLoader().load(`${game.assetsPath}plane/explosion.png`) }
+            u_tex: { value: new TextureLoader().load(`${game.assetsPath}ptera/explosion.png`) }
         }
 
         ShaderChunk.noise = noise;

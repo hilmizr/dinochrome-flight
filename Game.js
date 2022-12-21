@@ -1,7 +1,7 @@
 import * as THREE from "./libs/three137/three.module.js";
 import { RGBELoader } from "./libs/three137/RGBELoader.js";
 import { LoadingBar } from "./libs/LoadingBar.js";
-import { Plane } from "./Plane.js";
+import { Ptera } from "./Ptera.js";
 import { Obstacles } from "./Obstacles.js";
 import { SFX } from "./libs/SFX.js";
 
@@ -93,12 +93,12 @@ class Game {
     const shield_elm = document.querySelector("#shield-span");
     shield_elm.innerHTML = this.shield_point + "%";
 
-    this.plane.reset();
+    this.ptera.reset();
     this.obstacles.reset();
 
     this.active = true;
 
-    this.sfx.play("engine");
+    this.sfx.play("game_theme");
   }
 
   resize() {
@@ -163,25 +163,26 @@ class Game {
     this.loadSkybox();
     this.loading = true;
     this.loadingBar.visible = true;
-    this.plane = new Plane(this);
+    this.ptera = new Ptera(this);
     this.obstacles = new Obstacles(this);
     this.loadSFX();
   }
 
   loadSFX() {
-    this.sfx = new SFX(this.camera, this.assetsPath + "plane/");
+    this.sfx = new SFX(this.camera, this.assetsPath + "ptera/");
 
     this.sfx.load("explosion");
-    this.sfx.load("engine", true);
-    this.sfx.load("gliss");
+    this.sfx.load("game_theme", true);
     this.sfx.load("gameover");
+    this.sfx.load("wounded");
+    this.sfx.load("earn");
     this.sfx.load("bonus");
   }
 
   loadSkybox() {
     // // Skybox is basically a cube with different images applied to each face
     // // Set up the skybox
-    this.scene.background = new THREE.CubeTextureLoader().setPath(`${this.assetsPath}/plane/paintedsky/`).load(["wrath_ft.jpg", "wrath_bk.jpg", "wrath_up.jpg", "wrath_dn.jpg", "wrath_rt.jpg", "wrath_lf.jpg"], () => {
+    this.scene.background = new THREE.CubeTextureLoader().setPath(`${this.assetsPath}/ptera/paintedsky/`).load(["wrath_ft.jpg", "wrath_bk.jpg", "wrath_up.jpg", "wrath_dn.jpg", "wrath_rt.jpg", "wrath_lf.jpg"], () => {
       this.renderer.setAnimationLoop(this.render.bind(this));
     });
   }
@@ -195,7 +196,7 @@ class Game {
     gameover.style.display = "block";
     btn.style.display = "block";
 
-    this.plane.visible = false;
+    this.ptera.visible = false;
 
     this.sfx.stopAll();
     this.sfx.play("gameover");
@@ -210,7 +211,7 @@ class Game {
       this.bonusScore += 3;
       this.sfx.play("bonus");
     } else {
-      this.sfx.play("gliss");
+      this.sfx.play("earn");
     }
 
     elm.innerHTML = this.score + this.bonusScore;
@@ -232,7 +233,7 @@ class Game {
     const health_bar = document.getElementById("health-bar");
     health_bar.value = this.health_point;
 
-    this.sfx.play("gliss");
+    this.sfx.play("earn");
   }
 
   decLives() {
@@ -250,6 +251,7 @@ class Game {
     if (this.health_point <= 0) setTimeout(this.gameOver.bind(this), 800);
 
     this.sfx.play("explosion");
+    this.sfx.play("wounded");
   }
 
   fillShield() {
@@ -264,7 +266,7 @@ class Game {
     const shield_bar = document.getElementById("shield-bar");
     shield_bar.value = this.shield_point;
 
-    this.sfx.play("gliss");
+    this.sfx.play("earn");
   }
 
   decShield() {
@@ -283,17 +285,17 @@ class Game {
   }
 
   updateCamera() {
-    this.cameraController.position.copy(this.plane.position);
+    this.cameraController.position.copy(this.ptera.position);
     this.cameraController.position.y = 0;
-    this.cameraTarget.copy(this.plane.position);
+    this.cameraTarget.copy(this.ptera.position);
     this.cameraTarget.z += 6;
     this.camera.lookAt(this.cameraTarget);
   }
 
   render() {
     if (this.loading) {
-      // When plane and obstacles are ready, hide the loading bar
-      if (this.plane.ready && this.obstacles.ready) {
+      // When ptera and obstacles are ready, hide the loading bar
+      if (this.ptera.ready && this.obstacles.ready) {
         this.loading = false;
         this.loadingBar.visible = false;
       } else {
@@ -304,12 +306,12 @@ class Game {
     const dt = this.clock.getDelta();
     const time = this.clock.getElapsedTime();
 
-    this.plane.update(time);
-    requestAnimationFrame(this.plane.animate);
+    this.ptera.update(time);
+    requestAnimationFrame(this.ptera.animate);
     this.updateCamera();
 
     if (this.active) {
-      this.obstacles.update(this.plane.position, dt);
+      this.obstacles.update(this.ptera.position, dt);
     }
 
     this.renderer.render(this.scene, this.camera);
