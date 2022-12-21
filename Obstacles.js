@@ -123,7 +123,7 @@ class Obstacles {
   }
 
   initialize() {
-    console.log(this.heart);
+    
     this.obstacles = [];
 
     const obstacle = new Group();

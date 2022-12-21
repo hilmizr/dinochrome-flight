@@ -100,7 +100,9 @@ class Ptera {
             }
 
             // The object will keep on moving forward
-            this.velocity.z += 0.0001;
+            if (this.velocity.z < 0.6) {
+                this.velocity.z += 0.0001;
+            }
 
             // Actual function call to move/translate the object within the x,y,z axes
             this.ptera.translateX(this.velocity.x);

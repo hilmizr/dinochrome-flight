@@ -304,8 +304,8 @@ class Game {
         return;
       }
     }
-
-    const dt = this.clock.getDelta();
+    
+    const dt = this.clock.getDelta()+(this.ptera.velocity.z/36);
     const time = this.clockPtera.getElapsedTime();
 
     this.ptera.update(time);
